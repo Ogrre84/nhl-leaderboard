@@ -1,0 +1,23 @@
+/* styles.css */
+
+/* Customize the body background */
+body {
+    background-color: #f8f9fa;
+}
+
+/* Center headings */
+h1, h2 {
+    margin-bottom: 20px;
+}
+
+/* Style the forms */
+form {
+    background-color: #ffffff;
+    padding: 20px;
+    border-radius: 5px;
+}
+
+/* Table styling */
+table {
+    margin-top: 20px;
+}

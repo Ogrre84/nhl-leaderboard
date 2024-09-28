@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Assign Teams - NHL Leaderboard</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <!-- Navigation Bar -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="index.html">NHL Leaderboard</a>
+            <div class="collapse navbar-collapse">
+                <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                    <li class="nav-item"><a class="nav-link" href="login.html">Login/Signup</a></li>
+                    <li class="nav-item"><a class="nav-link active" href="assign.html">Assign Teams</a></li>
+                    <li class="nav-item"><a class="nav-link" href="leaderboard.html">Leaderboard</a></li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <div class="container mt-5">
+        <h2 class="text-center">Assign Your Favorite Teams</h2>
+        <form id="assignForm">
+            <div class="mb-3">
+                <label for="userEmail" class="form-label">Your Email</label>
+                <input type="email" class="form-control" id="userEmail" placeholder="Enter your email" required>
+            </div>
+            <div class="mb-3">
+                <label for="teamSelect" class="form-label">Select Teams</label>
+                <select multiple class="form-control" id="teamSelect" required>
+                    <!-- Teams will be dynamically populated here -->
+                </select>
+                <small class="form-text text-muted">Hold down the Ctrl (Windows) or Command (Mac) button to select multiple teams.</small>
+            </div>
+            <button type="submit" class="btn btn-primary">Assign Teams</button>
+        </form>
+    </div>
+
+    <!-- Bootstrap JS and Custom JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="scripts.js"></script>
+</body>
+</html>
