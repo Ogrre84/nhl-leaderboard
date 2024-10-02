@@ -1,0 +1,99 @@
+/* General styling for body */
+body {
+    font-family: Arial, sans-serif; /* Set a default font for the page */
+    background-color: #f9f9f9; /* Light background color */
+    color: #333; /* Dark text color */
+}
+
+/* Flex container for player tables and leaderboard */
+.container {
+    display: flex; /* Use flexbox for layout */
+    justify-content: flex-start; /* Align items to the left */
+    margin: 20px; /* Margin around the container */
+}
+
+/* Dropdown styles */
+.dropdowns {
+    margin-bottom: 20px; /* Space between dropdowns and player tables */
+}
+
+/* General styling for tables */
+table {
+    width: 300px; /* Set the width of tables */
+    border-collapse: collapse; /* Collapse borders */
+    margin-bottom: 20px; /* Space between tables */
+}
+
+th, td {
+    padding: 10px; /* Padding for cells */
+    text-align: left; /* Left-align text in the table */
+}
+
+th {
+    background-color: #152DC1; /* Deep blue header */
+    color: white; /* White text for headers */
+}
+
+tr:nth-child(even) {
+    background-color: #f2f2f2; /* Light gray for even rows */
+}
+
+tr:hover {
+    background-color: #ddd; /* Highlight row on hover */
+}
+
+/* Player teams styling */
+.player-teams {
+    border: 2px solid #152DC1; /* Border around each player's table */
+    border-radius: 5px; /* Rounded corners */
+    padding: 15px; /* Inner padding for the table */
+    margin-bottom: 20px; /* Space below each player's table */
+    width: 300px; /* Fixed width for player tables */
+    background-color: #fff; /* White background for better contrast */
+
+}
+
+/* Specific styling for the leaderboard */
+#leaderboard {
+    border: 2px solid #152DC1; /* Border color for the leaderboard */
+    border-radius: 5px; /* Rounded corners */
+    padding: 15px; /* Inner padding for the table */
+    margin-left: 20px; /* Space to the left of the leaderboard */
+    margin-bottom: 20px; /* Space below the leaderboard */
+    width: 300px; /* Fixed width for the leaderboard */
+	background-color:#fff;
+	height: 350px;
+
+}
+
+/* Ensure leaderboard is displayed correctly */
+.leaderboard-table {
+    width: 100%; /* Full width for the leaderboard table */
+}
+
+.leaderboard-table th, .leaderboard-table td {
+    text-align: left; /* Left align for leaderboard cells */
+    padding: 8px; /* Padding for cells */
+}
+
+.leaderboard-table tr:nth-child(even) {
+    background-color: #f2f2f2; /* Light gray for even rows */
+}
+
+.leaderboard-table tr:hover {
+    background-color: #ddd; /* Highlight row on hover */
+}
+
+/* Add any other custom styles for buttons, etc. */
+button {
+    background-color: #15C175; /* Green button color */
+    color: white; /* White text on buttons */
+    border: none; /* No border */
+    padding: 10px 15px; /* Padding for buttons */
+    border-radius: 5px; /* Rounded corners for buttons */
+    cursor: pointer; /* Pointer cursor on hover */
+}
+
+button:hover {
+    background-color: #138a5d; /* Darker green on hover */
+}

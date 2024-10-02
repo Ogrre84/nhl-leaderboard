@@ -1,8 +1,8 @@
 const mongoose = require('mongoose');
 
 const teamSchema = new mongoose.Schema({
-    teamName: { type: String, required: true },
-    points: { type: Number, required: true }
+    teamName: String,
+    points: Number
 });
 
 const Team = mongoose.model('Team', teamSchema);

@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="styles.css"> <!-- Ensure the path is correct -->
+    <title>NHL Leaderboard</title>
+</head>
+<body>
+    <h1>NHL Leaderboard</h1>
+
+    <div class="dropdowns">
+        <label for="player-select">Select a player:</label>
+        <select id="player-select">
+            <option value="">Select a player</option>
+        </select>
+
+        <label for="team-select">Select a team:</label>
+        <select id="team-select">
+            <option value="">Select a team</option>
+        </select>
+
+        <button id="assign-button">Assign Team</button>
+        <button id="remove-assignments-button">Remove All Assignments</button>
+    </div>
+
+    <div class="container">
+        <div id="players-container">
+            <!-- Dynamic player tables will be inserted here -->
+        </div>
+
+        <div id="leaderboard">
+            <h2>Leaderboard</h2>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Player</th>
+                        <th>Total Points</th>
+                    </tr>
+                </thead>
+                <tbody id="leaderboard-body">
+                    <!-- Dynamic content will be inserted here -->
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <script src="scripts.js"></script>
+</body>
+</html>
