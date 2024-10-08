@@ -149,34 +149,24 @@ document.addEventListener('DOMContentLoaded', async () => {
 	}
 
 	// Function to check if all teams are assigned
-	async function checkIfAllTeamsAssigned() {
-		try {
-			const response = await fetch('https://nhl-leaderboard-backend.onrender.com/api/playerTeams');
-			const playerTeams = await response.json();
+	// Function to check if all teams are assigned
+	function checkIfAllTeamsAssigned() {
+		// Check if the team dropdown has any options
+		if (teamSelect.options.length === 0) {
+			// Hide selection elements
+			document.getElementById('select-player-text').style.display = 'none';
+			document.getElementById('player-select').style.display = 'none';
+			document.getElementById('select-team-text').style.display = 'none';
+			document.getElementById('team-select').style.display = 'none';
 
-			// Assuming there are 6 players (Dad, Mom, Savi, Logan, Kaden, Kieran)
-			const totalPlayers = 6; // Adjust this if you have more or fewer players
-
-			// Check if the number of unique players in playerTeams matches totalPlayers
-			const assignedPlayers = new Set(playerTeams.map(playerTeam => playerTeam.playerId._id));
-
-			if (assignedPlayers.size === totalPlayers) {
-				// Hide selection elements
-				document.getElementById('select-player-text').style.display = 'none';
-				document.getElementById('player-select').style.display = 'none';
-				document.getElementById('select-team-text').style.display = 'none';
-				document.getElementById('team-select').style.display = 'none';
-
-				// Display message
-				const message = document.createElement('p');
-				message.textContent = 'All teams assigned for the current season';
-				message.id = 'all-teams-assigned-message'; // Optional: for styling or further manipulations
-				document.getElementById('players-container').appendChild(message);
-			}
-		} catch (error) {
-			console.error('Error checking team assignments:', error);
+			// Display message
+			const message = document.createElement('p');
+			message.textContent = 'All teams assigned for the current season';
+			message.id = 'all-teams-assigned-message'; // Optional: for styling or further manipulations
+			document.getElementById('players-container').appendChild(message);
 		}
 	}
+
 
 
 	// Call the initial load function
