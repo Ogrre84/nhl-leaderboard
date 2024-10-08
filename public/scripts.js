@@ -45,60 +45,92 @@ document.addEventListener('DOMContentLoaded', async () => {
 
     // Fetch player-team assignments and display in table
 	async function displayPlayerTeams() {
-		try {
-			const response = await fetch('https://nhl-leaderboard-backend.onrender.com/api/playerTeams');
-			const playerTeams = await response.json();
+    try {
+        const response = await fetch('https://nhl-leaderboard-backend.onrender.com/api/playerTeams');
+        const playerTeams = await response.json();
 
-			const playersContainer = document.getElementById('players-container');
-			playersContainer.innerHTML = ''; // Clear the container before adding new content
+        const playersContainer = document.getElementById('players-container');
+        playersContainer.innerHTML = ''; // Clear the container before adding new content
 
-			// Group by playerId to create a table for each player
-			const groupedTeams = playerTeams.reduce((acc, playerTeam) => {
-				const playerId = playerTeam.playerId._id; // Assuming playerId is present
-				if (!acc[playerId]) {
-					acc[playerId] = { player: playerTeam.playerId.name, teams: [], totalPoints: 0 };
-				}
-				const teamName = playerTeam.teamId.teamName;
-				const points = playerTeam.teamId.points; // Ensure points is being returned correctly
-				acc[playerId].teams.push({ name: teamName, points });
-				acc[playerId].totalPoints += points; // Accumulate total points
-				return acc;
-			}, {});
+        // Store assigned teams
+        const assignedTeams = new Set();
 
-			// Create a table for each player
-			for (const playerId in groupedTeams) {
-				const { player, teams, totalPoints } = groupedTeams[playerId];
+        // Group by playerId to create a table for each player
+        const groupedTeams = playerTeams.reduce((acc, playerTeam) => {
+            const playerId = playerTeam.playerId._id; // Assuming playerId is present
+            if (!acc[playerId]) {
+                acc[playerId] = { player: playerTeam.playerId.name, teams: [], totalPoints: 0 };
+            }
+            const teamName = playerTeam.teamId.teamName;
+            const points = playerTeam.teamId.points; // Ensure points is being returned correctly
+            acc[playerId].teams.push({ name: teamName, points });
+            acc[playerId].totalPoints += points; // Accumulate total points
+            
+            // Add the team to the assignedTeams set
+            assignedTeams.add(playerTeam.teamId._id);
 
-				// Create a div for the player's teams
-				const playerDiv = document.createElement('div');
-				playerDiv.classList.add('player-teams'); // Add a class for styling
+            return acc;
+        }, {});
 
-				// Create a header for the player's teams
-				const header = document.createElement('h2');
-				header.textContent = `${player}'s Teams`;
-				playerDiv.appendChild(header);
+        // Create a table for each player
+        for (const playerId in groupedTeams) {
+            const { player, teams, totalPoints } = groupedTeams[playerId];
 
-				// Create a list for the teams
-				const list = document.createElement('ul');
-				teams.forEach(team => {
-					const listItem = document.createElement('li');
-					listItem.textContent = `${team.name} (${team.points} points)`;
-					list.appendChild(listItem);
-				});
-				playerDiv.appendChild(list);
+            // Create a div for the player's teams
+            const playerDiv = document.createElement('div');
+            playerDiv.classList.add('player-teams'); // Add a class for styling
 
-				// Add total points
-				const totalPointsElement = document.createElement('p');
-				totalPointsElement.textContent = `Total Points: ${totalPoints}`;
-				playerDiv.appendChild(totalPointsElement);
+            // Create a header for the player's teams
+            const header = document.createElement('h2');
+            header.textContent = `${player}'s Teams`;
+            playerDiv.appendChild(header);
 
-				// Append this player's div to the container
-				playersContainer.appendChild(playerDiv);
-			}
-		} catch (error) {
-			console.error('Error fetching player teams:', error);
-		}
-	}
+            // Create a list for the teams
+            const list = document.createElement('ul');
+            teams.forEach(team => {
+                const listItem = document.createElement('li');
+                listItem.textContent = `${team.name} (${team.points} points)`;
+                list.appendChild(listItem);
+            });
+            playerDiv.appendChild(list);
+
+            // Add total points
+            const totalPointsElement = document.createElement('p');
+            totalPointsElement.textContent = `Total Points: ${totalPoints}`;
+            playerDiv.appendChild(totalPointsElement);
+
+            // Append this player's div to the container
+            playersContainer.appendChild(playerDiv);
+        }
+
+        // Now call the populateTeamSelect function with assignedTeams
+        await populateTeamSelect(assignedTeams);
+    } catch (error) {
+        console.error('Error fetching player teams:', error);
+    }
+}
+
+// Update the populateTeamSelect function to accept assignedTeams
+async function populateTeamSelect(assignedTeams) {
+    try {
+        const response = await fetch('https://nhl-leaderboard-backend.onrender.com/api/teams');
+        const teams = await response.json();
+
+        // Filter out assigned teams
+        const unassignedTeams = teams.filter(team => !assignedTeams.has(team._id));
+
+        unassignedTeams.sort((a, b) => a.teamName.localeCompare(b.teamName)); // Sort alphabetically
+        teamSelect.innerHTML = ''; // Clear existing options
+        unassignedTeams.forEach(team => {
+            const option = document.createElement('option');
+            option.value = team._id;
+            option.textContent = team.teamName;
+            teamSelect.appendChild(option);
+        });
+    } catch (error) {
+        console.error('Error fetching teams:', error);
+    }
+}
 
 	// Function to fetch and display the leaderboard
 	async function displayLeaderboard() {
