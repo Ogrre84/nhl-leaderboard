@@ -206,7 +206,7 @@ document.addEventListener('DOMContentLoaded', async () => {
 
 
 	// Remove all assignments
-	const removeAssignmentsButton = document.getElementById('remove-assignments-button');
+	/*const removeAssignmentsButton = document.getElementById('remove-assignments-button');
 
 	removeAssignmentsButton.addEventListener('click', async () => {
 		if (confirm('Are you sure you want to remove all team assignments?')) {
@@ -220,7 +220,7 @@ document.addEventListener('DOMContentLoaded', async () => {
 				console.error('Error removing team assignments:', error);
 			}
 		}
-	});
+	});*/
 	// Initial load
 	await populatePlayerSelect();
 	await populateTeamSelect();
