@@ -23,24 +23,25 @@ document.addEventListener('DOMContentLoaded', async () => {
     }
 
     // Fetch teams and populate team dropdown
-    async function populateTeamSelect() {
-        try {
-            const response = await fetch('https://nhl-leaderboard-backend.onrender.com/api/teams');
-			//const response = await fetch('/api/teams');
-            const teams = await response.json();
+    async function populateTeamSelect(assignedTeamIds = []) {
+    try {
+        const response = await fetch('https://nhl-leaderboard-backend.onrender.com/api/teams');
+        const teams = await response.json();
 
-            teams.sort((a, b) => a.teamName.localeCompare(b.teamName)); // Sort alphabetically
-            teamSelect.innerHTML = '';
-            teams.forEach(team => {
+        teams.sort((a, b) => a.teamName.localeCompare(b.teamName)); // Sort alphabetically
+        teamSelect.innerHTML = '';
+        teams.forEach(team => {
+            if (!assignedTeamIds.includes(team._id)) { // Only add unassigned teams
                 const option = document.createElement('option');
                 option.value = team._id;
                 option.textContent = team.teamName;
                 teamSelect.appendChild(option);
-            });
-        } catch (error) {
-            console.error('Error fetching teams:', error);
-        }
+            }
+        });
+    } catch (error) {
+        console.error('Error fetching teams:', error);
     }
+}
 
     // Fetch player-team assignments and display in table
 	async function displayPlayerTeams() {
@@ -167,37 +168,41 @@ document.addEventListener('DOMContentLoaded', async () => {
 
 	// Assign a team to a player
 	assignButton.addEventListener('click', async () => {
-		const playerId = playerSelect.value;
-		const teamId = teamSelect.value;
+    const playerId = playerSelect.value;
+    const teamId = teamSelect.value;
 
-		if (playerId && teamId) {
-			try {
-				const response = await fetch('https://nhl-leaderboard-backend.onrender.com/api/playerTeams', {
-					method: 'POST',
-					headers: { 'Content-Type': 'application/json' },
-					body: JSON.stringify({ playerId, teamId })
-				});
-				const result = await response.json();
-				console.log('Team assigned:', result);
+    if (playerId && teamId) {
+        try {
+            const response = await fetch('https://nhl-leaderboard-backend.onrender.com/api/playerTeams', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ playerId, teamId })
+            });
+            const result = await response.json();
+            console.log('Team assigned:', result);
 
-				// Remove the assigned team from the dropdown
-				const optionToRemove = Array.from(teamSelect.options).find(option => option.value === teamId);
-				if (optionToRemove) {
-					teamSelect.removeChild(optionToRemove);
-				}
+            // Remove the assigned team from the dropdown
+            const optionToRemove = Array.from(teamSelect.options).find(option => option.value === teamId);
+            if (optionToRemove) {
+                teamSelect.removeChild(optionToRemove);
+            }
 
-				displayPlayerTeams();  // Refresh the table
-				displayLeaderboard();
-				
-				// Check if all teams are assigned
-				await checkIfAllTeamsAssigned(); // Check after assignment
-			} catch (error) {
-				console.error('Error assigning team:', error);
-			}
-		} else {
-			alert('Please select both a player and a team.');
-		}
-	});
+            // Fetch all assigned teams to update the dropdown
+            const assignedResponse = await fetch('https://nhl-leaderboard-backend.onrender.com/api/playerTeams');
+            const assignedTeams = await assignedResponse.json();
+            const assignedTeamIds = assignedTeams.map(assignedTeam => assignedTeam.teamId._id);
+
+            // Update the team dropdown to show only unassigned teams
+            await populateTeamSelect(assignedTeamIds);
+            displayPlayerTeams();  // Refresh the table
+            displayLeaderboard();
+        } catch (error) {
+            console.error('Error assigning team:', error);
+        }
+    } else {
+        alert('Please select both a player and a team.');
+    }
+});
 
 
 	// Remove all assignments
