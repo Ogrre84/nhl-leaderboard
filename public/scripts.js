@@ -150,22 +150,14 @@ document.addEventListener('DOMContentLoaded', async () => {
 
 	// Function to check if all teams are assigned
 	// Function to check if all teams are assigned
-	function checkIfAllTeamsAssigned() {
-		// Check if the team dropdown has any options
-		if (teamSelect.options.length === 0) {
-			// Hide selection elements
-			document.getElementById('select-player-text').style.display = 'none';
-			document.getElementById('player-select').style.display = 'none';
-			document.getElementById('select-team-text').style.display = 'none';
-			document.getElementById('team-select').style.display = 'none';
-
-			// Display message
-			const message = document.createElement('p');
-			message.textContent = 'All teams assigned for the current season';
-			message.id = 'all-teams-assigned-message'; // Optional: for styling or further manipulations
-			document.getElementById('players-container').appendChild(message);
-		}
-	}
+    // Function to check if all teams are assigned
+    async function checkIfAllTeamsAssigned() {
+        if (teamSelect.options.length === 1) { // Only the default option remains
+            // Hide selection elements
+            document.querySelector('.dropdowns').style.display = 'none'; // Hide dropdowns
+            allTeamsAssignedMessage.style.display = 'block'; // Show the message
+        }
+    }
 
 
 
