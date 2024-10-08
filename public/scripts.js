@@ -23,26 +23,26 @@ document.addEventListener('DOMContentLoaded', async () => {
     }
 
     // Fetch teams and populate team dropdown
-    async function populateTeamSelect(assignedTeamIds = []) {
+    async function populateTeamSelect(assignedTeams) {
     try {
         const response = await fetch('https://nhl-leaderboard-backend.onrender.com/api/teams');
         const teams = await response.json();
 
-        teams.sort((a, b) => a.teamName.localeCompare(b.teamName)); // Sort alphabetically
-        teamSelect.innerHTML = '';
-        teams.forEach(team => {
-            if (!assignedTeamIds.includes(team._id)) { // Only add unassigned teams
-                const option = document.createElement('option');
-                option.value = team._id;
-                option.textContent = team.teamName;
-                teamSelect.appendChild(option);
-            }
+        // Filter out assigned teams
+        const unassignedTeams = teams.filter(team => !assignedTeams.has(team._id));
+
+        unassignedTeams.sort((a, b) => a.teamName.localeCompare(b.teamName)); // Sort alphabetically
+        teamSelect.innerHTML = ''; // Clear existing options
+        unassignedTeams.forEach(team => {
+            const option = document.createElement('option');
+            option.value = team._id;
+            option.textContent = team.teamName;
+            teamSelect.appendChild(option);
         });
     } catch (error) {
         console.error('Error fetching teams:', error);
     }
 }
-
     // Fetch player-team assignments and display in table
 	async function displayPlayerTeams() {
     try {
@@ -105,11 +105,13 @@ document.addEventListener('DOMContentLoaded', async () => {
 
         // Now call the populateTeamSelect function with assignedTeams
         await populateTeamSelect(assignedTeams);
+
+        // Check if all teams are assigned and hide the button if true
+        checkIfAllTeamsAssigned(assignedTeams);
     } catch (error) {
         console.error('Error fetching player teams:', error);
     }
 }
-
 // Update the populateTeamSelect function to accept assignedTeams
 async function populateTeamSelect(assignedTeams) {
     try {
@@ -184,14 +186,25 @@ async function populateTeamSelect(assignedTeams) {
 	// Function to check if all teams are assigned
 	// Function to check if all teams are assigned
     // Function to check if all teams are assigned
-    async function checkIfAllTeamsAssigned() {
-        if (teamSelect.options.length === 1) { // Only the default option remains
-            // Hide selection elements
-            document.querySelector('.dropdowns').style.display = 'none'; // Hide dropdowns
-            allTeamsAssignedMessage.style.display = 'block'; // Show the message
-        }
-    }
+   function checkIfAllTeamsAssigned(assignedTeams) {
+    // Get all teams count
+    const totalTeams = 32; // Update this if the number of teams changes
 
+    // Check if all teams are assigned
+    if (assignedTeams.size === totalTeams) {
+        // Hide the remove assignments button
+        document.getElementById('remove-assignments-button').style.display = 'none';
+
+        // Optionally show a message or handle this case as needed
+        const message = document.getElementById('all-teams-assigned');
+        message.style.display = 'block'; // Show the message if needed
+    } else {
+        // Show the button if not all teams are assigned
+        document.getElementById('remove-assignments-button').style.display = 'block';
+        const message = document.getElementById('all-teams-assigned');
+        message.style.display = 'none'; // Hide the message if not all teams are assigned
+    }
+}
 
 
 	// Call the initial load function
