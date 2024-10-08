@@ -25,7 +25,8 @@ document.addEventListener('DOMContentLoaded', async () => {
     // Fetch teams and populate team dropdown
     async function populateTeamSelect() {
         try {
-            const response = await fetch('/api/teams');
+            const response = await fetch('https://nhl-leaderboard-backend.onrender.com/api/teams');
+			//const response = await fetch('/api/teams');
             const teams = await response.json();
 
             teams.sort((a, b) => a.teamName.localeCompare(b.teamName)); // Sort alphabetically
@@ -47,7 +48,7 @@ document.addEventListener('DOMContentLoaded', async () => {
 // Fetch player-team assignments and display in boxes for each player
 async function displayPlayerTeams() {
     try {
-        const response = await fetch('/api/playerTeams');
+        const response = await fetch('https://nhl-leaderboard-backend.onrender.com/api/playerTeams');
         const playerTeams = await response.json();
 
         const playersContainer = document.getElementById('players-container');
@@ -103,7 +104,7 @@ async function displayPlayerTeams() {
 // Function to fetch and display the leaderboard
 async function displayLeaderboard() {
     try {
-        const response = await fetch('/api/playerTeams');
+        const response = await fetch('https://nhl-leaderboard-backend.onrender.com/api/playerTeams');
         const playerTeams = await response.json();
 
         const playerPoints = {};
@@ -168,7 +169,7 @@ assignButton.addEventListener('click', async () => {
 
     if (playerId && teamId) {
         try {
-            const response = await fetch('/api/playerTeams', {
+            const response = await fetch('https://nhl-leaderboard-backend.onrender.com/api/playerTeams', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ playerId, teamId })
@@ -198,7 +199,7 @@ const removeAssignmentsButton = document.getElementById('remove-assignments-butt
 removeAssignmentsButton.addEventListener('click', async () => {
     if (confirm('Are you sure you want to remove all team assignments?')) {
         try {
-            await fetch('/api/playerTeams', {
+            await fetch('https://nhl-leaderboard-backend.onrender.com/api/playerTeams', {
                 method: 'DELETE',
             });
             console.log('All team assignments removed');
