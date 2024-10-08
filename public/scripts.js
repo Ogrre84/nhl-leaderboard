@@ -7,7 +7,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     // Fetch players and populate player dropdown
     async function populatePlayerSelect() {
         try {
-            const response = await fetch('/api/players');
+            const response = await fetch('https://nhl-leaderboard-backend.onrender.com/api/players');
             const players = await response.json();
 
             playerSelect.innerHTML = '';
