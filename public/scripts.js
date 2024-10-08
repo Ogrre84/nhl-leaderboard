@@ -43,176 +43,199 @@ document.addEventListener('DOMContentLoaded', async () => {
     }
 
     // Fetch player-team assignments and display in table
-    // Fetch player-team assignments and display in tables
-// Fetch player-team assignments and display in tables for each player
-// Fetch player-team assignments and display in boxes for each player
-async function displayPlayerTeams() {
-    try {
-        const response = await fetch('https://nhl-leaderboard-backend.onrender.com/api/playerTeams');
-        const playerTeams = await response.json();
+	async function displayPlayerTeams() {
+		try {
+			const response = await fetch('https://nhl-leaderboard-backend.onrender.com/api/playerTeams');
+			const playerTeams = await response.json();
 
-        const playersContainer = document.getElementById('players-container');
-        playersContainer.innerHTML = ''; // Clear the container before adding new content
+			const playersContainer = document.getElementById('players-container');
+			playersContainer.innerHTML = ''; // Clear the container before adding new content
 
-        // Group by playerId to create a table for each player
-        const groupedTeams = playerTeams.reduce((acc, playerTeam) => {
-            const playerId = playerTeam.playerId._id; // Assuming playerId is present
-            if (!acc[playerId]) {
-                acc[playerId] = { player: playerTeam.playerId.name, teams: [], totalPoints: 0 };
-            }
-            const teamName = playerTeam.teamId.teamName;
-            const points = playerTeam.teamId.points; // Ensure points is being returned correctly
-            acc[playerId].teams.push({ name: teamName, points });
-            acc[playerId].totalPoints += points; // Accumulate total points
-            return acc;
-        }, {});
+			// Group by playerId to create a table for each player
+			const groupedTeams = playerTeams.reduce((acc, playerTeam) => {
+				const playerId = playerTeam.playerId._id; // Assuming playerId is present
+				if (!acc[playerId]) {
+					acc[playerId] = { player: playerTeam.playerId.name, teams: [], totalPoints: 0 };
+				}
+				const teamName = playerTeam.teamId.teamName;
+				const points = playerTeam.teamId.points; // Ensure points is being returned correctly
+				acc[playerId].teams.push({ name: teamName, points });
+				acc[playerId].totalPoints += points; // Accumulate total points
+				return acc;
+			}, {});
 
-        // Create a table for each player
-        for (const playerId in groupedTeams) {
-            const { player, teams, totalPoints } = groupedTeams[playerId];
+			// Create a table for each player
+			for (const playerId in groupedTeams) {
+				const { player, teams, totalPoints } = groupedTeams[playerId];
 
-            // Create a div for the player's teams
-            const playerDiv = document.createElement('div');
-            playerDiv.classList.add('player-teams'); // Add a class for styling
+				// Create a div for the player's teams
+				const playerDiv = document.createElement('div');
+				playerDiv.classList.add('player-teams'); // Add a class for styling
 
-            // Create a header for the player's teams
-            const header = document.createElement('h2');
-            header.textContent = `${player}'s Teams`;
-            playerDiv.appendChild(header);
+				// Create a header for the player's teams
+				const header = document.createElement('h2');
+				header.textContent = `${player}'s Teams`;
+				playerDiv.appendChild(header);
 
-            // Create a list for the teams
-            const list = document.createElement('ul');
-            teams.forEach(team => {
-                const listItem = document.createElement('li');
-                listItem.textContent = `${team.name} (${team.points} points)`;
-                list.appendChild(listItem);
-            });
-            playerDiv.appendChild(list);
+				// Create a list for the teams
+				const list = document.createElement('ul');
+				teams.forEach(team => {
+					const listItem = document.createElement('li');
+					listItem.textContent = `${team.name} (${team.points} points)`;
+					list.appendChild(listItem);
+				});
+				playerDiv.appendChild(list);
 
-            // Add total points
-            const totalPointsElement = document.createElement('p');
-            totalPointsElement.textContent = `Total Points: ${totalPoints}`;
-            playerDiv.appendChild(totalPointsElement);
+				// Add total points
+				const totalPointsElement = document.createElement('p');
+				totalPointsElement.textContent = `Total Points: ${totalPoints}`;
+				playerDiv.appendChild(totalPointsElement);
 
-            // Append this player's div to the container
-            playersContainer.appendChild(playerDiv);
-        }
-    } catch (error) {
-        console.error('Error fetching player teams:', error);
-    }
-}
-// Function to fetch and display the leaderboard
-async function displayLeaderboard() {
-    try {
-        const response = await fetch('https://nhl-leaderboard-backend.onrender.com/api/playerTeams');
-        const playerTeams = await response.json();
+				// Append this player's div to the container
+				playersContainer.appendChild(playerDiv);
+			}
+		} catch (error) {
+			console.error('Error fetching player teams:', error);
+		}
+	}
 
-        const playerPoints = {};
+	// Function to fetch and display the leaderboard
+	async function displayLeaderboard() {
+		try {
+			const response = await fetch('https://nhl-leaderboard-backend.onrender.com/api/playerTeams');
+			const playerTeams = await response.json();
 
-        // Calculate total points for each player
-        playerTeams.forEach(playerTeam => {
-            const playerId = playerTeam.playerId.name; // Access the player name
-            const points = playerTeam.teamId.points; // Access the points for each team
+			const playerPoints = {};
 
-            // Sum the points for each player
-            if (!playerPoints[playerId]) {
-                playerPoints[playerId] = 0;
-            }
-            playerPoints[playerId] += points;
-        });
+			// Calculate total points for each player
+			playerTeams.forEach(playerTeam => {
+				const playerId = playerTeam.playerId.name; // Access the player name
+				const points = playerTeam.teamId.points; // Access the points for each team
 
-        // Convert the object to an array and sort by points
-        const leaderboardArray = Object.entries(playerPoints).map(([player, points]) => ({ player, points }));
-        leaderboardArray.sort((a, b) => b.points - a.points); // Sort by total points in descending order
+				// Sum the points for each player
+				if (!playerPoints[playerId]) {
+					playerPoints[playerId] = 0;
+				}
+				playerPoints[playerId] += points;
+			});
 
-        const leaderboardBody = document.getElementById('leaderboard-body');
-        leaderboardBody.innerHTML = ''; // Clear existing leaderboard
+			// Convert the object to an array and sort by points
+			const leaderboardArray = Object.entries(playerPoints).map(([player, points]) => ({ player, points }));
+			leaderboardArray.sort((a, b) => b.points - a.points); // Sort by total points in descending order
 
-        // Populate the leaderboard table
-        leaderboardArray.forEach(({ player, points }) => {
-            const row = document.createElement('tr');
-            row.innerHTML = `
-                <td>${player}</td>
-                <td>${points}</td>
-            `;
-            leaderboardBody.appendChild(row);
-        });
-    } catch (error) {
-        console.error('Error fetching leaderboard:', error);
-    }
-}
+			const leaderboardBody = document.getElementById('leaderboard-body');
+			leaderboardBody.innerHTML = ''; // Clear existing leaderboard
 
+			// Populate the leaderboard table
+			leaderboardArray.forEach(({ player, points }) => {
+				const row = document.createElement('tr');
+				row.innerHTML = `
+					<td>${player}</td>
+					<td>${points}</td>
+				`;
+				leaderboardBody.appendChild(row);
+			});
+		} catch (error) {
+			console.error('Error fetching leaderboard:', error);
+		}
+	}
 
-// Update the initial load function to include leaderboard display
-async function initialLoad() {
-    await populatePlayerSelect();
-    await populateTeamSelect();
-    await displayPlayerTeams();
-    await displayLeaderboard(); // Call the new leaderboard display function
-}
+	// Update the initial load function to include leaderboard display
+	async function initialLoad() {
+		await populatePlayerSelect();
+		await populateTeamSelect();
+		await displayPlayerTeams();
+		await displayLeaderboard(); // Call the new leaderboard display function
+	}
 
-// Call the initial load function
-initialLoad();
+	// Function to check if all teams are assigned
+	async function checkIfAllTeamsAssigned() {
+		try {
+			const response = await fetch('https://nhl-leaderboard-backend.onrender.com/api/playerTeams');
+			const playerTeams = await response.json();
 
+			// Assuming there are 6 players (Dad, Mom, Savi, Logan, Kaden, Kieran)
+			const totalPlayers = 6; // Adjust this if you have more or fewer players
 
-/*// Initial load
-await populatePlayerSelect();
-await populateTeamSelect();
-await displayPlayerTeams();
-await displayLeaderboard(); // Call the new leaderboard display function
-*/
+			// Check if the number of unique players in playerTeams matches totalPlayers
+			const assignedPlayers = new Set(playerTeams.map(playerTeam => playerTeam.playerId._id));
 
-    // Assign a team to a player
-assignButton.addEventListener('click', async () => {
-    const playerId = playerSelect.value;
-    const teamId = teamSelect.value;
+			if (assignedPlayers.size === totalPlayers) {
+				// Hide selection elements
+				document.getElementById('select-player-text').style.display = 'none';
+				document.getElementById('player-select').style.display = 'none';
+				document.getElementById('select-team-text').style.display = 'none';
+				document.getElementById('team-select').style.display = 'none';
 
-    if (playerId && teamId) {
-        try {
-            const response = await fetch('https://nhl-leaderboard-backend.onrender.com/api/playerTeams', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ playerId, teamId })
-            });
-            const result = await response.json();
-            console.log('Team assigned:', result);
-
-            // Remove the assigned team from the dropdown
-            const optionToRemove = Array.from(teamSelect.options).find(option => option.value === teamId);
-            if (optionToRemove) {
-                teamSelect.removeChild(optionToRemove);
-            }
-
-            displayPlayerTeams();  // Refresh the table
-			displayLeaderboard();
-        } catch (error) {
-            console.error('Error assigning team:', error);
-        }
-    } else {
-        alert('Please select both a player and a team.');
-    }
-});
-
-// Remove all assignments
-const removeAssignmentsButton = document.getElementById('remove-assignments-button');
-
-removeAssignmentsButton.addEventListener('click', async () => {
-    if (confirm('Are you sure you want to remove all team assignments?')) {
-        try {
-            await fetch('https://nhl-leaderboard-backend.onrender.com/api/playerTeams', {
-                method: 'DELETE',
-            });
-            console.log('All team assignments removed');
-            displayPlayerTeams();  // Refresh the table
-        } catch (error) {
-            console.error('Error removing team assignments:', error);
-        }
-    }
-});
+				// Display message
+				const message = document.createElement('p');
+				message.textContent = 'All teams assigned for the current season';
+				message.id = 'all-teams-assigned-message'; // Optional: for styling or further manipulations
+				document.getElementById('players-container').appendChild(message);
+			}
+		} catch (error) {
+			console.error('Error checking team assignments:', error);
+		}
+	}
 
 
-    // Initial load
-    await populatePlayerSelect();
-    await populateTeamSelect();
-    await displayPlayerTeams();
-});
+	// Call the initial load function
+	initialLoad();
+
+
+	// Assign a team to a player
+	assignButton.addEventListener('click', async () => {
+		const playerId = playerSelect.value;
+		const teamId = teamSelect.value;
+
+		if (playerId && teamId) {
+			try {
+				const response = await fetch('https://nhl-leaderboard-backend.onrender.com/api/playerTeams', {
+					method: 'POST',
+					headers: { 'Content-Type': 'application/json' },
+					body: JSON.stringify({ playerId, teamId })
+				});
+				const result = await response.json();
+				console.log('Team assigned:', result);
+
+				// Remove the assigned team from the dropdown
+				const optionToRemove = Array.from(teamSelect.options).find(option => option.value === teamId);
+				if (optionToRemove) {
+					teamSelect.removeChild(optionToRemove);
+				}
+
+				displayPlayerTeams();  // Refresh the table
+				displayLeaderboard();
+				
+				// Check if all teams are assigned
+				await checkIfAllTeamsAssigned(); // Check after assignment
+			} catch (error) {
+				console.error('Error assigning team:', error);
+			}
+		} else {
+			alert('Please select both a player and a team.');
+		}
+	});
+
+
+	// Remove all assignments
+	const removeAssignmentsButton = document.getElementById('remove-assignments-button');
+
+	removeAssignmentsButton.addEventListener('click', async () => {
+		if (confirm('Are you sure you want to remove all team assignments?')) {
+			try {
+				await fetch('https://nhl-leaderboard-backend.onrender.com/api/playerTeams', {
+					method: 'DELETE',
+				});
+				console.log('All team assignments removed');
+				displayPlayerTeams();  // Refresh the table
+			} catch (error) {
+				console.error('Error removing team assignments:', error);
+			}
+		}
+	});
+	// Initial load
+	await populatePlayerSelect();
+	await populateTeamSelect();
+	await displayPlayerTeams();
+	});
