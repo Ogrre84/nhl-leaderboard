@@ -186,23 +186,22 @@ async function populateTeamSelect(assignedTeams) {
 	// Function to check if all teams are assigned
 	// Function to check if all teams are assigned
     // Function to check if all teams are assigned
-   function checkIfAllTeamsAssigned(assignedTeams) {
-    // Get all teams count
-    const totalTeams = 32; // Update this if the number of teams changes
+   // Function to check if all teams are assigned
+function checkIfAllTeamsAssigned() {
+    // Check if the team dropdown has any options
+    const dropdowns = document.querySelector('.dropdowns'); // Select the dropdowns div
+    if (teamSelect.options.length === 0) {
+        // Hide selection elements
+        dropdowns.style.display = 'none';
 
-    // Check if all teams are assigned
-    if (assignedTeams.size === totalTeams) {
-        // Hide the remove assignments button
-        document.getElementById('remove-assignments-button').style.display = 'none';
-
-        // Optionally show a message or handle this case as needed
-        const message = document.getElementById('all-teams-assigned');
-        message.style.display = 'block'; // Show the message if needed
+        // Display message
+        const message = document.createElement('p');
+        message.textContent = 'All teams assigned for the current season';
+        message.id = 'all-teams-assigned-message'; // Optional: for styling or further manipulations
+        document.getElementById('players-container').appendChild(message);
     } else {
-        // Show the button if not all teams are assigned
-        document.getElementById('remove-assignments-button').style.display = 'block';
-        const message = document.getElementById('all-teams-assigned');
-        message.style.display = 'none'; // Hide the message if not all teams are assigned
+        // If there are still teams, ensure the dropdowns are visible
+        dropdowns.style.display = 'flex'; // Or 'block', depending on your layout
     }
 }
 
