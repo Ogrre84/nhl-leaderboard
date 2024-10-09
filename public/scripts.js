@@ -194,7 +194,7 @@ document.addEventListener('DOMContentLoaded', async () => {
         try {
             const response = await fetch('https://nhl-leaderboard-backend.onrender.com/api/lastScrape');
             const lastRun = await response.json();
-            document.getElementById('last-scrape-time').textContent = `Last Scrape: ${new Date(lastRun.timestamp).toLocaleString()}`;
+            document.getElementById('lastScrapedAt').textContent = `Last Scrape: ${new Date(lastRun.timestamp).toLocaleString()}`;
         } catch (error) {
             console.error('Error fetching last run time:', error);
         }
