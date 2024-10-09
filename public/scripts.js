@@ -202,6 +202,8 @@ async function fetchLastScrapeTime() {
         console.error('Error fetching last scrape time:', error);
     }
 }
+// Temporarily call the function directly for testing
+fetchLastScrapeTime();
 
 // Call the function when the DOM is fully loaded
 document.addEventListener('DOMContentLoaded', fetchLastScrapeTime);
