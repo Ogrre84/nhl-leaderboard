@@ -163,7 +163,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     }
 
 document.addEventListener('DOMContentLoaded', async () => {
-    await fetchLastRunTime(); // Call to fetch the last run time first
+    await fetchLastScrapeTime(); // Call to fetch the last run time first
     await populatePlayerSelect();
     await populateTeamSelect();
     await displayPlayerTeams();
@@ -203,7 +203,7 @@ document.addEventListener('DOMContentLoaded', async () => {
 	}
 
     // Call this function when the page loads
-    document.addEventListener('DOMContentLoaded', fetchLastRunTime);
+    document.addEventListener('DOMContentLoaded', fetchLastScrapeTime);
 
     // Initial load
     await initialLoad();
