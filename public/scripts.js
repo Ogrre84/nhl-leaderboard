@@ -192,7 +192,7 @@ document.addEventListener('DOMContentLoaded', async () => {
 
 	async function fetchLastScrapeTime() {
 		try {
-			const response = await fetch('https://nhl-leaderboard-backend.onrender.com/api/lastScrapeTime');
+			const response = await fetch('https://nhl-leaderboard-backend.onrender.com/api/lastScrape');
 			const data = await response.json();
 			console.log('Last Scrape Data:', data); // Log the data to see its structure
 			const lastScrapeTime = data.lastScrapedAt ? new Date(data.lastScrapedAt).toLocaleString() : 'No data available'; // Format the date
