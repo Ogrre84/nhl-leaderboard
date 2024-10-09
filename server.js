@@ -2,6 +2,7 @@ const express = require('express');
 const mongoose = require('mongoose');
 const bodyParser = require('body-parser');
 const path = require('path');
+const LastScrape = require('./models/lastScrapeModel')
 require('dotenv').config();
 
 const app = express();
@@ -72,6 +73,17 @@ app.get('/api/playerTeams', async (req, res) => {
     } catch (error) {
         console.error('Error fetching player teams:', error);
         res.status(500).send('Internal Server Error');
+    }
+});
+
+// Get the last scrape time
+app.get('/api/lastScrape', async (req, res) => {
+    try {
+        const lastScrape = await LastScrape.findOne().sort({ lastScrapedAt: -1 }); // Get the most recent scrape time
+        res.json(lastScrape);
+    } catch (error) {
+        console.error('Error fetching last scrape time:', error);
+        res.status(500).send('Server error');
     }
 });
 

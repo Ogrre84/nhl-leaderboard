@@ -1,0 +1,26 @@
+name: Scrape NHL Points
+
+on:
+  schedule:
+    - cron: '0 0 * * *'  # Runs daily at midnight UTC
+  workflow_dispatch:  # Allows manual triggering
+
+jobs:
+  scrape-nhl-points:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '20'
+
+      - name: Install dependencies
+        run: npm install
+
+      - name: Run scraper
+        env:
+          MONGO_URI: ${{ secrets.MONGO_URI }}  # Using the GitHub secret
+        run: node scrapePoints.js

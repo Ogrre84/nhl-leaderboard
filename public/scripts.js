@@ -184,10 +184,7 @@ async function populateTeamSelect(assignedTeams) {
 	}
 
 	// Function to check if all teams are assigned
-	// Function to check if all teams are assigned
-    // Function to check if all teams are assigned
-   // Function to check if all teams are assigned
-function checkIfAllTeamsAssigned() {
+	function checkIfAllTeamsAssigned() {
     // Check if the team dropdown has any options
     const dropdowns = document.querySelector('.dropdowns'); // Select the dropdowns div
     if (teamSelect.options.length === 0) {
@@ -205,11 +202,39 @@ function checkIfAllTeamsAssigned() {
     }
 }
 
+	async function fetchLastRunTime() {
+		try {
+			const response = await fetch('https://your-backend-url.com/api/lastRun');
+			const lastRun = await response.json();
+			document.getElementById('last-run-time').textContent = `Last Scrape: ${new Date(lastRun.timestamp).toLocaleString()}`;
+		} catch (error) {
+			console.error('Error fetching last run time:', error);
+		}
+	}
+	
+	const displayLastScrapeTime = async () => {
+    try {
+        const response = await fetch('https://nhl-leaderboard-backend.onrender.com/api/lastScrape');
+        const lastScrape = await response.json();
+        const lastScrapeTimeText = lastScrape ? `Last scraped at: ${new Date(lastScrape.lastScrapedAt).toLocaleString()}` : 'No scrape data available';
+        document.getElementById('last-scrape-time').innerText = lastScrapeTimeText; // Assuming you have an element with this ID
+    } catch (error) {
+        console.error('Error fetching last scrape time:', error);
+    }
+};
+	
+
+	// Call this function when the page loads
+	document.addEventListener('DOMContentLoaded', fetchLastRunTime);
+
 
 	// Call the initial load function
 	initialLoad();
 
-
+	// Call this function on page load
+	window.onload = () => {
+		displayLastScrapeTime();
+	};
 	// Assign a team to a player
 	assignButton.addEventListener('click', async () => {
     const playerId = playerSelect.value;

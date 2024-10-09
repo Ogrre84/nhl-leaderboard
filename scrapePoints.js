@@ -1,6 +1,7 @@
 const mongoose = require('mongoose');
 const puppeteer = require('puppeteer');
 require('dotenv').config();
+const LastScrape = require('./models/lastScrapeModel'); // Import the model
 
 const teamSchema = new mongoose.Schema({
     teamName: String,
@@ -17,7 +18,7 @@ const fetchNHLPoints = async () => {
 
         const browser = await puppeteer.launch();
         const page = await browser.newPage();
-        await page.goto('https://www.hockey-reference.com/leagues/NHL_2024.html#stats');
+        await page.goto('https://www.hockey-reference.com/leagues/NHL_2025.html#stats');
 
         const teamsPoints = await page.evaluate(() => {
             const teams = [];
@@ -40,6 +41,10 @@ const fetchNHLPoints = async () => {
         // Save the scraped data to MongoDB
         const savedTeams = await Team.insertMany(teamsPoints);
         console.log("Teams and points saved to MongoDB:", savedTeams);
+
+        // Update the last scrape time
+        await LastScrape.deleteMany({}); // Clear previous last scrape records
+        await LastScrape.create({ lastScrapedAt: new Date() }); // Insert new last scrape time
 
         await browser.close();
         await mongoose.connection.close();
