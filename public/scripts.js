@@ -190,15 +190,17 @@ document.addEventListener('DOMContentLoaded', async () => {
         }
     }
 
-    async function fetchLastRunTime() {
-        try {
-            const response = await fetch('https://nhl-leaderboard-backend.onrender.com/api/lastScrape');
-            const lastRun = await response.json();
-            document.getElementById('lastScrapedAt').textContent = `Last Scrape: ${new Date(lastRun.timestamp).toLocaleString()}`;
-        } catch (error) {
-            console.error('Error fetching last run time:', error);
-        }
-    }
+	async function fetchLastScrapeTime() {
+		try {
+			const response = await fetch('https://nhl-leaderboard-backend.onrender.com/api/lastScrapeTime');
+			const data = await response.json();
+			console.log('Last Scrape Data:', data); // Log the data to see its structure
+			const lastScrapeTime = data.lastScrapedAt ? new Date(data.lastScrapedAt).toLocaleString() : 'No data available'; // Format the date
+			document.getElementById('last-scrape-time').textContent = `Last Scrape Time: ${lastScrapeTime}`;
+		} catch (error) {
+			console.error('Error fetching last scrape time:', error);
+		}
+	}
 
     // Call this function when the page loads
     document.addEventListener('DOMContentLoaded', fetchLastRunTime);
