@@ -24,8 +24,8 @@ const fetchNHLPoints = async () => {
             const rows = document.querySelectorAll('table#stats tbody tr');
             rows.forEach(row => {
                 const teamName = row.querySelector('td[data-stat="team_name"] a')?.innerText;
-                const points = row.querySelector('td[data-stat="points"]')?.innerText;
-                if (teamName && points) {
+                const points = 0;
+                if (teamName) {
                     teams.push({ teamName, points: parseInt(points) });
                 }
             });

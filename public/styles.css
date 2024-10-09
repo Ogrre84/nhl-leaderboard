@@ -84,6 +84,11 @@ tr:hover {
     background-color: #ddd; /* Highlight row on hover */
 }
 
+#high-score {
+    padding: 15px; /* Inner padding for the table */
+    margin-left: 20px; /* Space to the left of the leaderboard */
+    margin-bottom: 20px; /* Space below the leaderboard */
+}
 /* Add any other custom styles for buttons, etc. */
 button {
     background-color: #15C175; /* Green button color */
