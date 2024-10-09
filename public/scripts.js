@@ -160,6 +160,7 @@ document.addEventListener('DOMContentLoaded', async () => {
         await populatePlayerSelect();
         await displayPlayerTeams();
         await displayLeaderboard(); // Call the new leaderboard display function
+		await fetchLastRunTime();
     }
 
     // Function to check if all teams are assigned
