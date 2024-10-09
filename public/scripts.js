@@ -190,6 +190,7 @@ document.addEventListener('DOMContentLoaded', async () => {
         }
     }
 
+// Fetch the last scrape time
 async function fetchLastScrapeTime() {
     try {
         const response = await fetch('https://nhl-leaderboard-backend.onrender.com/api/lastScrape'); // Check this URL
@@ -202,9 +203,9 @@ async function fetchLastScrapeTime() {
     }
 }
 
+// Call the function when the DOM is fully loaded
+document.addEventListener('DOMContentLoaded', fetchLastScrapeTime);
 
-    // Call this function when the page loads
-    document.addEventListener('DOMContentLoaded', fetchLastScrapeTime);
 
     // Initial load
     await initialLoad();
