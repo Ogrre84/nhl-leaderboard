@@ -156,13 +156,12 @@ document.addEventListener('DOMContentLoaded', async () => {
     }
 
     // Update the initial load function to include leaderboard display
-/*    async function initialLoad() {
+    async function initialLoad() {
         await populatePlayerSelect();
         await displayPlayerTeams();
         await displayLeaderboard(); // Call the new leaderboard display function
-		await fetchLastRunTime();
     }
-*/
+
 document.addEventListener('DOMContentLoaded', async () => {
     await fetchLastRunTime(); // Call to fetch the last run time first
     await populatePlayerSelect();
