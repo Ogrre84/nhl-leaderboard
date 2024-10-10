@@ -6,6 +6,11 @@ const teamSchema = new mongoose.Schema({
     teamName: String,
     points: Number
 });
+const lastScrapeSchema = new mongoose.Schema({
+    lastScrapedAt: { type: Date, default: Date.now }
+});
+
+const LastScrape = mongoose.model('LastScrape', lastScrapeSchema);
 
 const Team = mongoose.model('Team', teamSchema);
 
@@ -44,6 +49,10 @@ const fetchNHLPoints = async () => {
         }
 
         console.log("Teams and points updated in MongoDB");
+
+        // Update the last scrape time
+        await LastScrape.create({ lastScrapedAt: new Date() });
+        console.log("Last scrape time updated in MongoDB");
 
         await browser.close();
         await mongoose.connection.close();
