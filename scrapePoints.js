@@ -20,7 +20,11 @@ const fetchNHLPoints = async () => {
         await mongoose.connect(process.env.MONGO_URI, { useNewUrlParser: true, useUnifiedTopology: true });
         console.log("Connected to MongoDB");
 
-        const browser = await puppeteer.launch();
+        //const browser = await puppeteer.launch();
+		const browser = await puppeteer.launch({
+		args: ['--no-sandbox', '--disable-setuid-sandbox'],
+		});
+
         const page = await browser.newPage();
         await page.goto('https://www.hockey-reference.com/leagues/NHL_2025.html#stats');
 
