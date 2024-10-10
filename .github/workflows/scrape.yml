@@ -2,7 +2,7 @@ name: Scrape NHL Points
 
 on:
   schedule:
-    - cron: '0 0 * * *'  # Runs daily at midnight UTC
+    - cron: '0 * * * *'  # Runs every hour
   workflow_dispatch:  # Allows manual triggering
 
 jobs:
@@ -17,11 +17,11 @@ jobs:
         with:
           node-version: '20'
 
-      - name: Install Chromium
-        run: sudo apt-get install -y chromium-browser
-
       - name: Install dependencies
         run: npm install
+
+      - name: Install Chromium
+        run: sudo apt-get install -y chromium-browser
 
       - name: Run scraper
         env:

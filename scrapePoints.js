@@ -22,8 +22,10 @@ const fetchNHLPoints = async () => {
 
         //const browser = await puppeteer.launch();
 		const browser = await puppeteer.launch({
-		args: ['--no-sandbox', '--disable-setuid-sandbox'],
+			executablePath: '/usr/bin/chromium-browser', // Path to system-installed Chromium
+			args: ['--no-sandbox', '--disable-setuid-sandbox'], // Required in CI environments
 		});
+
 
         const page = await browser.newPage();
         await page.goto('https://www.hockey-reference.com/leagues/NHL_2025.html#stats');
